@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Resource Hub | Mark John Ando</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #0B1120;
+            color: #E2E8F0;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Enhanced Glass Card */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+            z-index: -1;
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px -5px rgba(0, 0, 0, 0.4);
+        }
+        .input-field {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .input-field:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            outline: none;
+        }
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-up {
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+        }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: { 850: '#1e293b', 900: '#0f172a', 950: '#020617' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500/30 selection:text-indigo-200">
+
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div class="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] bg-blue-900/20 rounded-full blur-[100px]"></div>
+        <div class="absolute top-[20%] -right-[10%] w-[60vw] h-[60vw] bg-indigo-900/20 rounded-full blur-[100px]"></div>
+    </div>
+
+    <nav class="border-b border-white/5 bg-[#0B1120]/80 backdrop-blur-xl sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row gap-5 justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 border border-white/10 flex items-center justify-center shadow-lg">
+                    <span class="font-bold text-blue-400 text-lg">D</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-bold text-lg tracking-tight text-white leading-none">Dev<span class="text-blue-400">Hub</span></span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-[0.2em]">Dev helps Dev</span>
+                </div>
+            </div>
+            <div class="flex gap-3 w-full md:w-auto">
+                <div class="relative w-full md:w-80 group">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-slate-500 group-focus-within:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+                    <input type="text" id="searchInput" placeholder="Search topics (e.g. 'Java')..." 
+                        class="w-full bg-slate-900/50 border border-white/5 text-slate-200 text-sm rounded-lg focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50 block pl-10 p-2.5 outline-none transition-all placeholder-slate-600 hover:bg-slate-800/50 hover:border-white/10">
+                </div>
+                <select id="categoryFilter" class="bg-slate-900/50 border border-white/5 text-slate-300 text-sm rounded-lg focus:ring-1 focus:ring-blue-500/50 focus:border-blue-500/50 p-2.5 cursor-pointer hover:bg-slate-800/50 transition-colors outline-none">
+                    <option value="all">All</option>
+                    <option value="Website">Web</option>
+                    <option value="YouTube">Video</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="text-center lg:text-left animate-up">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-[1.1] tracking-tight">
+                    Start coding <br/>
+                    <span class="gradient-text">the right way.</span>
+                </h1>
+                <p class="text-slate-400 text-lg md:text-xl mb-10 leading-relaxed max-w-xl mx-auto lg:mx-0 font-light">
+                    Hi, I'm <strong class="text-slate-200 font-medium">Mark John Ando</strong>. I've curated the essential toolkit for Web Dev, Java OOP, and C++ so you don't have to waste time searching.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="https://markandoportfolio.netlify.app/" target="_blank" class="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition-all shadow-[0_0_20px_-5px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_-5px_rgba(37,99,235,0.6)]">
+                        View Portfolio
+                    </a>
+                    <a href="#resourceGrid" class="inline-flex items-center justify-center px-8 py-4 text-sm font-medium text-slate-300 bg-slate-800/50 border border-white/5 rounded-lg hover:bg-slate-800 hover:text-white transition-all backdrop-blur-sm">
+                        Browse Resources
+                    </a>
+                </div>
+            </div>
+            <div class="relative animate-up delay-200 lg:order-2 w-full">
+                <div class="absolute inset-0 bg-blue-500/10 blur-[60px] rounded-full"></div>
+                <div class="relative bg-[#1a2030] rounded-xl border border-white/10 shadow-2xl overflow-hidden transform transition-transform duration-700 hover:scale-[1.01]">
+                    <div class="bg-[#111827] px-4 py-3 flex items-center gap-4 border-b border-white/5">
+                        <div class="flex gap-2 opacity-60">
+                            <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                        </div>
+                        <div class="bg-black/30 rounded flex-grow max-w-md mx-auto py-1 text-center">
+                            <span class="text-[10px] text-slate-500 font-mono">markandoportfolio.netlify.app</span>
+                        </div>
+                    </div>
+                    <div class="relative group aspect-video bg-slate-900 overflow-hidden">
+                        <img src="/assets/image.png" alt="Portfolio Preview" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0B1120] via-transparent to-transparent opacity-80"></div>
+                        <div class="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <p class="text-white font-medium text-sm">My Personal Projects</p>
+                            <p class="text-slate-400 text-xs">Web Development & Design</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="relative z-10 flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+        <div class="flex items-center justify-between mb-12 animate-up delay-200">
+            <h2 class="text-2xl font-semibold text-white tracking-tight">Essential Resources</h2>
+            <span class="text-xs text-slate-500 uppercase tracking-widest border border-slate-800 px-3 py-1 rounded-full">v1.0 Collection</span>
+        </div>
+        
+        <div id="resourceGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-up delay-300">
+            </div>
+
+        <div id="noResults" class="hidden flex-col items-center justify-center py-24 text-center">
+            <h3 class="text-lg font-medium text-slate-300">No matches found</h3>
+            <p class="text-slate-500 text-sm mt-1">Try refining your search.</p>
+        </div>
+    </main>
+
+    <section class="relative z-10 w-full bg-slate-900/20 border-t border-white/5 py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-2xl p-8 md:p-12 text-center animate-up delay-200 relative overflow-hidden">
+                <div id="formContainer">
+                    <h2 class="text-2xl font-bold text-white mb-2">Know a great resource?</h2>
+                    <p class="text-slate-400 text-sm mb-8">Help your juniors by suggesting a tool or channel I missed.</p>
+
+                    <form name="suggestions" method="POST" data-netlify="true" class="space-y-4 text-left">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Resource Name / URL</label>
+                                <input type="text" name="resource" required
+                                    class="input-field w-full rounded-lg px-4 py-3 text-slate-200 text-sm placeholder-slate-600"
+                                    placeholder="e.g. youtube.com/coolchannel">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Your Email</label>
+                                <input type="email" name="email" required
+                                    class="input-field w-full rounded-lg px-4 py-3 text-slate-200 text-sm placeholder-slate-600"
+                                    placeholder="student@wmsu.edu.ph">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 ml-1">Why is it good?</label>
+                            <textarea name="description" rows="3" required
+                                class="input-field w-full rounded-lg px-4 py-3 text-slate-200 text-sm placeholder-slate-600"
+                                placeholder="Briefly explain what this teaches..."></textarea>
+                        </div>
+                        <button type="submit" 
+                            class="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold py-3.5 rounded-lg transition-all shadow-lg hover:shadow-blue-500/25 flex items-center justify-center gap-2">
+                            <span>Submit Suggestion</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="relative z-10 border-t border-white/5 bg-[#080d1a] py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-400 text-sm mb-3">Curated with intent by <span class="text-slate-200">Mark John Ando</span></p>
+            <p class="text-[10px] text-slate-600 uppercase tracking-widest">&copy; 2025 Zamboanga City</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- RESOURCE DATA ---
+        // Added 'suggestedBy' field. If null, it defaults to 'Me'.
+        const resources = [
+            { title: "Codédex", category: "Website", tags: ["Web Dev", "Python", "RPG"], desc: "A gamified coding platform. Start your journey in HTML, CSS, and Python in a beautiful 8-bit RPG world.", url: "https://www.codedex.io", color: "text-purple-400", bg: "bg-purple-400/10", blob: "bg-purple-500", suggestedBy: null },
+            { title: "freeCodeCamp", category: "Website", tags: ["Certifications", "Full Stack", "DSA"], desc: "The gold standard. Earn free verified certifications in Web Design, JS Algorithms, and Backend APIs.", url: "https://www.freecodecamp.org", color: "text-green-400", bg: "bg-green-400/10", blob: "bg-green-500", suggestedBy: null },
+            { title: "Dribbble", category: "Website", tags: ["UI/UX", "Inspiration", "Art"], desc: "The leading destination to find & showcase creative work. Essential for UI design inspiration.", url: "https://dribbble.com", color: "text-pink-400", bg: "bg-pink-400/10", blob: "bg-pink-500", suggestedBy: null },
+            { title: "Figma", category: "Website", tags: ["UI Tool", "Prototyping", "Design"], desc: "The industry-standard interface design tool. Design your websites here before writing code.", url: "https://www.figma.com", color: "text-orange-400", bg: "bg-orange-400/10", blob: "bg-orange-500", suggestedBy: null},
+            { title: "GitHub", category: "Website", tags: ["Git", "Open Source", "Hosting"], desc: "Where the world builds software. Essential for hosting your code, version control, and collaboration.", url: "https://github.com", color: "text-slate-200", bg: "bg-slate-700/30", blob: "bg-slate-500", suggestedBy: null },
+            { title: "CSVisTool", category: "Website", tags: ["Data", "CSV", "Utility"], desc: "A handy utility for visualizing and manipulating CSV data files quickly in the browser.", url: "https://csvistool.com", color: "text-blue-300", bg: "bg-blue-400/10", blob: "bg-blue-500", suggestedBy: null },
+            { title: "Codewars", category: "Website", tags: ["Algorithms", "Logic", "Java"], desc: "Achieve mastery through challenge-based learning. Practice syntax and logic for Java, C++, and JS.", url: "https://www.codewars.com", color: "text-red-400", bg: "bg-red-400/10", blob: "bg-red-500", suggestedBy: null },
+            { title: "Doji Creates", category: "YouTube", tags: ["Creative Coding", "Three.js"], desc: "Excellent channel for creative coding, 3D web development, and bridging design and code.", url: "https://www.youtube.com/@DojiCreates", color: "text-cyan-400", bg: "bg-cyan-400/10", blob: "bg-cyan-500", suggestedBy: null },
+            { title: "Bro Code", category: "YouTube", tags: ["Java OOP", "C++", "Fast"], desc: "No-nonsense tutorials. Highly recommended for learning Java OOP and C++ concepts quickly.", url: "https://www.youtube.com/@BroCodez", color: "text-yellow-400", bg: "bg-yellow-400/10", blob: "bg-yellow-500", suggestedBy: null },
+            { title: "NetworkChuck", category: "YouTube", tags: ["Networking", "Hacking", "IT"], desc: "High-energy tutorials. Great for understanding how the internet, servers, and networks work.", url: "https://www.youtube.com/@NetworkChuck", color: "text-orange-400", bg: "bg-orange-400/10", blob: "bg-orange-500", suggestedBy: null },
+            { title: "freeCodeCamp (YT)", category: "YouTube", tags: ["Courses", "Deep Dives"], desc: "Massive, ad-free video courses on almost any programming topic. Great for deep diving.", url: "https://www.youtube.com/@freecodecamp", color: "text-slate-200", bg: "bg-slate-700/30", blob: "bg-slate-500", suggestedBy: null }
+        ];
+
+        const grid = document.getElementById('resourceGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const noResults = document.getElementById('noResults');
+
+        function renderResources(data) {
+            grid.innerHTML = '';
+            if (data.length === 0) {
+                noResults.classList.remove('hidden');
+                noResults.classList.add('flex');
+            } else {
+                noResults.classList.add('hidden');
+                noResults.classList.remove('flex');
+                
+                data.forEach((item, index) => {
+                    // Generate Tags
+                    const tagsHtml = item.tags.map(tag => 
+                        `<span class="px-2.5 py-1 bg-slate-800/50 text-slate-400 text-[10px] font-semibold uppercase tracking-wider rounded border border-white/5">${tag}</span>`
+                    ).join('');
+
+                    // Generate Icon
+                    const icon = item.category === 'YouTube' 
+                        ? `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>`
+                        : `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>`;
+                    
+                    const delayClass = index % 3 === 0 ? '' : index % 3 === 1 ? 'delay-100' : 'delay-200';
+                    
+                    // --- SUGGESTED BY LOGIC ---
+                    let footerHtml = '';
+                    if (item.suggestedBy) {
+                        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(item.suggestedBy)}&background=random&color=fff&size=24`;
+                        footerHtml = `
+                            <div class="flex items-center gap-2 pl-1">
+                                <img src="${avatarUrl}" alt="${item.suggestedBy}" class="w-5 h-5 rounded-full border border-white/20 shadow-sm opacity-80">
+                                <span class="text-xs font-semibold text-slate-400">${item.suggestedBy}</span>
+                            </div>
+                        `;
+                    } else {
+                        // SUGGESTED BY ME (Default)
+                        footerHtml = `
+                            <div class="flex items-center gap-2 pl-1">
+                                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white text-[9px] font-bold shadow-md shadow-blue-500/20">
+                                    MJ
+                                </span>
+                                <span class="text-xs font-semibold text-slate-400">Developer</span>
+                            </div>
+                        `;
+                    }
+
+                    // --- CARD HTML ---
+                    const card = `
+                        <a href="${item.url}" target="_blank" class="glass-card group flex flex-col h-full rounded-xl p-6 transition-all duration-500 animate-up ${delayClass}">
+                            <div class="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-2xl ${item.blob}"></div>
+
+                            <div class="relative z-10 flex justify-between items-start mb-5">
+                                <div class="p-3 rounded-lg ${item.bg} ${item.color} ring-1 ring-inset ring-white/5">
+                                    ${icon}
+                                </div>
+                                <svg class="w-4 h-4 text-slate-600 group-hover:text-blue-400 transition-colors transform group-hover:translate-x-1 group-hover:-translate-y-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </div>
+                            
+                            <div class="relative z-10 flex-grow">
+                                <h3 class="text-lg font-bold text-slate-100 mb-2 group-hover:text-blue-400 transition-colors">${item.title}</h3>
+                                <p class="text-slate-400 text-sm leading-relaxed mb-5 line-clamp-3 font-light">${item.desc}</p>
+                            </div>
+                            
+                            <div class="relative z-10 pt-4 border-t border-white/5 flex flex-wrap gap-2 mb-4">
+                                ${tagsHtml}
+                            </div>
+
+                            <div class="relative z-10 pt-3 border-t border-white/5 flex items-center justify-between mt-auto">
+                                <span class="text-[10px] font-medium text-slate-600 uppercase tracking-wide">Suggested by</span>
+                                ${footerHtml}
+                            </div>
+                        </a>
+                    `;
+                    grid.innerHTML += card;
+                });
+            }
+        }
+
+        function filterData() {
+            const query = searchInput.value.toLowerCase();
+            const category = categoryFilter.value;
+            const filtered = resources.filter(item => {
+                const matchesSearch = item.title.toLowerCase().includes(query) || 
+                                      item.desc.toLowerCase().includes(query) || 
+                                      item.tags.some(tag => tag.toLowerCase().includes(query));
+                const matchesCategory = category === 'all' || item.category === category;
+                return matchesSearch && matchesCategory;
+            });
+            renderResources(filtered);
+        }
+
+        searchInput.addEventListener('input', filterData);
+        categoryFilter.addEventListener('change', filterData);
+        
+        // Initial Render
+        renderResources(resources);
+    </script>
+</body>
+</html>
